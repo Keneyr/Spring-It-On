@@ -90,12 +90,12 @@ void inertialize_function(float& g, float& gv, float t, float freq, float amp, f
 
 void inertialize_function1(float& g, float& gv, float t)
 {
-    inertialize_function(g, gv, t, 2.0f * M_PI * 1.25, 74.0, 23.213123, 254);
+    inertialize_function(g, gv, t, 2.0f * PI * 1.25, 74.0, 23.213123, 254);
 }
 
 void inertialize_function2(float& g, float& gv, float t)
 {
-    inertialize_function(g, gv, t, 2.0f * M_PI * 3.4, 28.0, 912.2381, 113);
+    inertialize_function(g, gv, t, 2.0f * PI * 3.4, 28.0, 912.2381, 113);
 }
 
 //--------------------------------------

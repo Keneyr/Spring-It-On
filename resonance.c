@@ -87,7 +87,7 @@ int main(void)
         
         // Get Goal
         
-        g = screenHeight / 2.0f + 10.0 * sinf(t * 2.0f * M_PI * goal_frequency);
+        g = screenHeight / 2.0f + 10.0 * sinf(t * 2.0f * PI * goal_frequency);
         
         // Resonance
         

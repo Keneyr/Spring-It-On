@@ -35,8 +35,8 @@ int main(void)
 {
     // Init Window
     
-    const int screenWidth = 640;
-    const int screenHeight = 360;
+    const int screenWidth = 2048;
+    const int screenHeight = 1024;
 
     InitWindow(screenWidth, screenHeight, "raylib [springs] example - interpolation");
 

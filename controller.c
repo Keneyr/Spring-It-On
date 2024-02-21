@@ -1,7 +1,10 @@
 #include "common.h"
 
 //--------------------------------------
-
+/*
+* it's a simple damper, the goal velocity q is zero, 
+* which means the acceleration of the character is zero
+*/
 void spring_character_update(
     float& x, 
     float& v, 
@@ -15,12 +18,15 @@ void spring_character_update(
     float j1 = a + j0*y;
     float eydt = fast_negexp(y*dt);
 
+    //get the character postion: integrate velocity with respect to time
     x = eydt*(((-j1)/(y*y)) + ((-j0 - j1*dt)/y)) + 
         (j1/(y*y)) + j0/y + v_goal * dt + x;
     v = eydt*(j0 + j1*dt) + v_goal;
     a = eydt*(a - j1*y*dt);
 }
-
+/*
+* If we want to predict the future trajectory we can use simple spring to update arrays of data each with a different dt
+*/
 void spring_character_predict(
     float px[], 
     float pv[], 
@@ -67,8 +73,8 @@ int main(void)
 {
     // Init Window
     
-    const int screenWidth = 640;
-    const int screenHeight = 360;
+    const int screenWidth = 2048;
+    const int screenHeight = 1024;
 
     InitWindow(screenWidth, screenHeight, "raylib [springs] example - controller");
 
@@ -97,7 +103,7 @@ int main(void)
     
     while (!WindowShouldClose())
     {
-        // Shift History
+        // Shift History, like a sliding window, the front() is always the latest
         
         for (int i = TRAJ_MAX - 1; i > 0; i--)
         {
@@ -111,7 +117,7 @@ int main(void)
 
         // Update Spring
         
-        float gamepadx = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
+        /*float gamepadx = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
         float gamepady = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
         float gamepadmag = sqrtf(gamepadx*gamepadx + gamepady*gamepady);
         
@@ -128,7 +134,20 @@ int main(void)
             gamepadx = 0.0f;
             gamepady = 0.0f;
         }
+        */
+        float gamepadx = 0.0f;
+        float gamepady = 0.0f;
+        //vec3 pad(0, 0, 0); 
+        float am = 1.f;
+        if (IsKeyDown(KEY_RIGHT_SHIFT) || IsKeyDown(KEY_LEFT_SHIFT)) am *= 0.5f;  // use SHIFT to slow down/walk
+        if (IsKeyDown(KEY_RIGHT_CONTROL) || IsKeyDown(KEY_LEFT_CONTROL)) am *= 2.f; // use CTRL to speed up
+        // use ARROW keys to move the character
+        if (IsKeyDown(KEY_RIGHT)) gamepadx += am;
+        if (IsKeyDown(KEY_LEFT)) gamepadx -= am;
+        if (IsKeyDown(KEY_UP)) gamepady -= am;
+        if (IsKeyDown(KEY_DOWN)) gamepady += am;
         
+        //the signal of gamepad or keyboard changes the speed of this character
         traj_xv_goal = 250.0f * gamepadx;
         traj_yv_goal = 250.0f * gamepady;
         
@@ -153,7 +172,7 @@ int main(void)
                 DrawLineV(start, stop, BLUE);                
                 DrawCircleV(start, 3, BLUE);                
             }
-            
+            //predicted position of character
             for (int i = 1; i < PRED_MAX; i ++)
             {
                 Vector2 start = {predx[i + 0], predy[i + 0]};
@@ -163,11 +182,13 @@ int main(void)
                 DrawCircleV(start, 3, MAROON);                
             }
             
+            //current frame position of character
             DrawCircleV((Vector2){trajx, trajy}, 4, DARKBLUE);                
             
             Vector2 gamepadPosition = {60, 300};
             Vector2 gamepadStickPosition = {gamepadPosition.x + gamepadx * 25, gamepadPosition.y + gamepady * 25};
             DrawCircleLines(gamepadPosition.x, gamepadPosition.y, 25, DARKPURPLE);
+            
             DrawCircleV(gamepadPosition, 3, DARKPURPLE);                
             DrawCircleV(gamepadStickPosition, 3, DARKPURPLE);                
             DrawLineV(gamepadPosition, gamepadStickPosition, DARKPURPLE);

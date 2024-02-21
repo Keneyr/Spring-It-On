@@ -2,6 +2,9 @@
 
 //--------------------------------------
 
+/*
+* offset = animation_src - animation_dst
+*/
 void inertialize_transition(
     float& off_x, float& off_v, 
     float src_x, float src_v,
@@ -11,6 +14,10 @@ void inertialize_transition(
     off_v = (src_v + off_v) - dst_v;
 }
 
+/*
+* We then switch to this animation, and at every frame we decay this offset toward zero, 
+* adding the result back to our currently playing animation.
+*/
 void inertialize_update(
     float& out_x, float& out_v,
     float& off_x, float& off_v,
@@ -31,12 +38,12 @@ void inertialize_function(float& g, float& gv, float t, float freq, float amp, f
 
 void inertialize_function1(float& g, float& gv, float t)
 {
-    inertialize_function(g, gv, t, 2.0f * M_PI * 1.25, 74.0, 23.213123, 254);
+    inertialize_function(g, gv, t, 2.0f * PI * 1.25, 74.0, 23.213123, 254);
 }
 
 void inertialize_function2(float& g, float& gv, float t)
 {
-    inertialize_function(g, gv, t, 2.0f * M_PI * 3.4, 28.0, 912.2381, 113);
+    inertialize_function(g, gv, t, 2.0f * PI * 3.4, 28.0, 912.2381, 113);
 }
 
 //--------------------------------------
@@ -55,8 +62,8 @@ int main(void)
 {
     // Init Window
     
-    const int screenWidth = 640;
-    const int screenHeight = 360;
+    const int screenWidth = 2048;
+    const int screenHeight = 1024;
 
     InitWindow(screenWidth, screenHeight, "raylib [springs] example - inertialization");
 
@@ -154,6 +161,9 @@ int main(void)
             DrawCircleV((Vector2){goalOffset, g}, 5, MAROON);
             DrawCircleV((Vector2){goalOffset, x}, 5, DARKBLUE);
             
+            /*
+            * current animation(blending)
+            */
             for (int i = 0; i < HISTORY_MAX - 1; i++)
             {
                 Vector2 x_start = {goalOffset - (t - t_prev[i + 0]) * timescale, x_prev[i + 0]};
@@ -162,7 +172,9 @@ int main(void)
                 DrawLineV(x_start, x_stop, BLUE);                
                 DrawCircleV(x_start, 2, BLUE);
             }
-            
+            /*
+            * the goal animation
+            */
             for (int i = 0; i < HISTORY_MAX - 1; i++)
             {
                 Vector2 g_start = {goalOffset - (t - t_prev[i + 0]) * timescale, g_prev[i + 0]};

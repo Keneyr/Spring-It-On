@@ -26,9 +26,9 @@ void extrapolate_function1(float& g, float& gv, float t)
 {
     float g0, gv0, g1, gv1, g2, gv2;
   
-    extrapolate_function(g0, gv0, t, 2.0f * M_PI * 1.5, 40.0, 23.213123, 0);
-    extrapolate_function(g1, gv1, t, 2.0f * M_PI * 3.4, 14.0, 912.2381, 0);
-    extrapolate_function(g2, gv2, t, 2.0f * M_PI * 0.4, 21.0, 452.2381, 0);
+    extrapolate_function(g0, gv0, t, 2.0f * PI * 1.5, 40.0, 23.213123, 0);
+    extrapolate_function(g1, gv1, t, 2.0f * PI * 3.4, 14.0, 912.2381, 0);
+    extrapolate_function(g2, gv2, t, 2.0f * PI * 0.4, 21.0, 452.2381, 0);
     
     g = 200 + g0 + g1 + g2;
     gv = gv0 + gv1 + gv2;

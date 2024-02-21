@@ -13,8 +13,8 @@ int main(void)
 {
     // Init Window
     
-    const int screenWidth = 640;
-    const int screenHeight = 360;
+    const int screenWidth = 2048;
+    const int screenHeight = 1024;
 
     InitWindow(screenWidth, screenHeight, "raylib [springs] example - smoothing");
 
@@ -61,7 +61,10 @@ int main(void)
         }
         
         g += noise * (((float)rand() / RAND_MAX) * 2.0f - 1.0);
-        
+        /*
+        * Springs also work well for filtering out sudden changes or jitters in signals, 
+        * and even springs with quite a small halflife will do really well at removing any sudden jitters.
+        */
         if (jitter)
         {
             g -= jitter;
@@ -85,6 +88,10 @@ int main(void)
         
         t += dt;
         
+        /*
+        * any noisy signal can be easily smoothed in real time by a spring damper and 
+        * the half life can be used to control the amount of smoothing applied vs how responsive it is to changes.
+        */
         simple_spring_damper_exact(x, v, g, halflife, dt);
         
         x_prev[0] = x;

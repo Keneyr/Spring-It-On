@@ -10,12 +10,12 @@ void tracking_function(float& g, float& gv, float t, float freq, float amp, floa
 
 void tracking_function1(float& g, float& gv, float t)
 {
-    tracking_function(g, gv, t, 2.0f * M_PI * 1.25, 74.0, 23.213123, 254);
+    tracking_function(g, gv, t, 2.0f * PI * 1.25, 74.0, 23.213123, 254);
 }
 
 void tracking_function2(float& g, float& gv, float t)
 {
-    tracking_function(g, gv, t, 2.0f * M_PI * 3.4, 28.0, 912.2381, 113);
+    tracking_function(g, gv, t, 2.0f * PI * 3.4, 28.0, 912.2381, 113);
 }
 
 //--------------------------------------
